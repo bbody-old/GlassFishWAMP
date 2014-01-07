@@ -8,21 +8,20 @@ import org.codehaus.jackson.JsonNode;
 import ws.wamplay.annotations.URIPrefix;
 import ws.wamplay.annotations.onRPC;
 
-@URIPrefix("http://example.com/simple/calc#")
+@URIPrefix("http://example.com/calc#")
 public class TestRPCController extends WAMPlayContoller {
 
         @onRPC("meaningOfLife")
         public static String getMeaningOfLife(String sessionID) {
                 return "Meaning of life is: 42";
         }
-        
-        @onRPC("add")
+
+        @onRPC("capital")
         public static String add(String sessionID, JsonNode[] args) {
-            if ((args[0].isNumber()) && (args[1].isNumber())){
-                return new Integer(args[0].getIntValue()+ args[1].getIntValue()).toString();
-            } else {
-                throw new IllegalArgumentException("Needs two numbers!");
-                //return "0";
-            }
+                if (!args[0].isTextual() || args[0].isNumber()) {
+                        throw new IllegalArgumentException("Argument is not a word!");
+                }
+                String ans = args[0].getTextValue().toUpperCase();
+                return ans;
         }
 }

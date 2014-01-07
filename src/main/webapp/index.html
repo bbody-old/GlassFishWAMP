@@ -6,7 +6,7 @@
         <script type="text/JavaScript" src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>See console for output</h1>
         <script type="text/javascript">
             window.onload = function() {
                 var c = {};
@@ -14,12 +14,11 @@
                 c.skipSubprotocolAnnounce = true;
 
                 // WAMP server
-                var wsuri = "ws://localhost:8080/WAMPPlayTest/wamp";
+                var wsuri = "ws://localhost:8080/GlassFishWAMP/wamp";
 
                 ab.connect(wsuri,
                         // WAMP session was established
                                 function(session) {
-                                    alert("Working!");
                                     // asynchronous RPC, returns promise object
                                     session.call("http://example.com/simple/calc#add",
                                             2,3).then(
@@ -40,5 +39,7 @@
                                                 ,c)
                                             };
         </script>
+        <a href="RPC.html">RPC Example</a>
+        <a href="PubSub.html">PubSub Example (Work in progress)</a>
     </body>
 </html>

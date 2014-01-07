@@ -1,10 +1,13 @@
 package ws.wamplay.models;
 
+import com.google.gson.Gson;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import javax.websocket.Session;
 import org.codehaus.jackson.JsonNode;
 
 
@@ -13,10 +16,10 @@ public class WAMPlayClient {
 	final Set<String> topics;
 	final Map<String, String> prefixes;
 	final String ID;
-	final WebSocket.Out<JsonNode> out;
+	final Session out;
 	JsonNode lastSent;
 
-	public WAMPlayClient(WebSocket.Out<JsonNode> out) {
+	public WAMPlayClient(Session out) {
 		this.out = out;
 		topics = new HashSet<String>();
 		prefixes = new HashMap<String, String>();
@@ -31,7 +34,19 @@ public class WAMPlayClient {
 		}
 
 		try {
-			out.write(response);
+                    //System.out.println(response.toString());
+			out.getBasicRemote().sendText(response.toString());
+		} catch (Exception e) {
+			//log.error("Cannot send, client dead!");
+                    System.out.println("Cannot send, client dead!");
+		}
+	}
+        
+        public void send(String response) {
+
+		try {
+                    //System.out.println(new Gson().toJson(response).toString());
+			out.getBasicRemote().sendText(response);
 		} catch (Exception e) {
 			//log.error("Cannot send, client dead!");
                     System.out.println("Cannot send, client dead!");
@@ -66,7 +81,7 @@ public class WAMPlayClient {
 		return this.ID;
 	}
 
-	public void kill() {
+	public void kill() throws IOException {
 		if (out != null) {
 			out.close();
 		}

@@ -3,8 +3,42 @@
     <head>
         <title>Start Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/JavaScript" src="http://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
     </head>
     <body>
         <h1>Hello World!</h1>
+        <script type="text/javascript">
+            window.onload = function() {
+                var c = {};
+                c.skipSubprotocolCheck = true;
+                c.skipSubprotocolAnnounce = true;
+
+                // WAMP server
+                var wsuri = "ws://localhost:8080/WAMPPlayTest/wamp";
+
+                ab.connect(wsuri,
+                        // WAMP session was established
+                                function(session) {
+                                    alert("Working!");
+                                    // asynchronous RPC, returns promise object
+                                    session.call("http://example.com/simple/calc#add",
+                                            2,3).then(
+                                            // RPC success callback
+                                                    function(res) {
+                                                        console.log("got result: " + res);
+                                                    },
+                                                    // RPC error callback
+                                                            function(error, desc) {
+                                                                console.log("error: " + desc);
+                                                            }
+                                                    );
+                                                },
+                                                // WAMP session is gone
+                                                        function(code, reason) {
+                                                            console.log(reason);
+                                                        }
+                                                ,c)
+                                            };
+        </script>
     </body>
 </html>

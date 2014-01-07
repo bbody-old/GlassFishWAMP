@@ -12,50 +12,69 @@ import ws.wamplay.annotations.onRPC;
 import ws.wamplay.callbacks.RPCCallback;
 import ws.wamplay.controllers.WAMPlayContoller;
 
-
 public class RPC {
 
-	//static ALogger log = Logger.of(RPC.class.getSimpleName());
-	static ConcurrentMap<String, RPCCallback> procURIs = new ConcurrentHashMap<String, RPCCallback>();
+    //static ALogger log = Logger.of(RPC.class.getSimpleName());
+    static ConcurrentMap<String, RPCCallback> procURIs = new ConcurrentHashMap<String, RPCCallback>();
 
-	public static void addController(String prefix, final WAMPlayContoller controller) {
-		for (final Method method : controller.getClass().getMethods()) {
-			if (method.isAnnotationPresent(onRPC.class)) {
-				String procURI = prefix
-						+ method.getAnnotation(onRPC.class).value();
-				procURIs.put(procURI, new RPCCallback() {
+    public static void addController(String prefix, final WAMPlayContoller controller) {
+        System.out.println("Adding");
+        for (final Method method : controller.getClass().getMethods()) {
+            if (method.isAnnotationPresent(onRPC.class)) {
+                String procURI = prefix
+                        + method.getAnnotation(onRPC.class).value();
+                procURIs.put(procURI, new RPCCallback() {
+                    @Override
+                    public JsonNode call(String sessionID, JsonNode[] args) throws Throwable {
+                        try {
+                            ObjectMapper mapper = new ObjectMapper();
+                            if (args.length == 0) {
+                                System.out.println("No RPC arguments!");
+                                Object o = method.invoke(controller, sessionID);
+                                
+                                JsonNode rootNode = mapper.readTree("{\"value\" : \"" + o.toString() + "\"}");
 
-					@Override
-					public JsonNode call(String sessionID, JsonNode... args) throws Throwable {
-						try {
-                                                    ObjectMapper mapper = new ObjectMapper();
-							if (args.length == 0) {
-								//log.debug("No RPC arguments!");
-                                                            System.out.println("No RPC arguments!");
-                                                            
-								return mapper.valueToTree(method.invoke(controller, sessionID));
-							}
-							return mapper.valueToTree(method.invoke(controller, sessionID, args));
-						} catch (InvocationTargetException e) {
-							throw e.getCause();
-						}
-					}
-				});
-			}
-		}
+                                /**
+                                 * * read value from key "name" **
+                                 */
+                                return rootNode.path("value");
+                            } else {
+                                for (int i = 0; i < args.length; i++){
+                                    System.out.println((i+1) +":"+ args[i].toString());
+                                }
+                                Object o = method.invoke(controller, sessionID, args);
+                                if (o != null){
+                                    System.out.println("Answer: " + o.toString());
+                                } else {
+                                    System.out.println("Answer: null");
+                                }
+                                JsonNode rootNode = mapper.readTree("{\"value\" : \"" + o.toString() + "\"}");
 
-	}
+                                /**
+                                 * * read value from key "name" **
+                                 */
+                                return rootNode.path("value");
+                            }
+                        } catch (InvocationTargetException e) {
+                            System.out.println("='(");
+                            throw e.getCause();
+                        }
+                    }
+                });
+            }
+        }
 
-	public static void addCallback(String procURI, RPCCallback cb) {
-		procURIs.put(procURI, cb);
-	}
+    }
 
-	public static RPCCallback getCallback(String procURI) {
-		return procURIs.get(procURI);
-	}
+    public static void addCallback(String procURI, RPCCallback cb) {
+        procURIs.put(procURI, cb);
+    }
 
-	public static void reset() {
-		procURIs.clear();
-	}
+    public static RPCCallback getCallback(String procURI) {
+        return procURIs.get(procURI);
+    }
 
+    public static void reset() {
+        procURIs.clear();
+    }
 }

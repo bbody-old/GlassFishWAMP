@@ -1,16 +1,17 @@
 package ws.wamplay.controllers;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import play.Logger.ALogger;
-import play.libs.F.Callback;
-import play.libs.F.Callback0;
-import play.mvc.Controller;
-import play.mvc.WebSocket;
 import ws.wamplay.annotations.URIPrefix;
 import ws.wamplay.callbacks.PubSubCallback;
 import ws.wamplay.controllers.messageHandlers.HandlerFactory;
@@ -20,7 +21,8 @@ import ws.wamplay.models.PubSub;
 import ws.wamplay.models.RPC;
 import ws.wamplay.models.WAMPlayClient;
 
-public class WAMPlayServer extends Controller {
+@ServerEndpoint("/wamp")
+public class WAMPlayServer {
         public static String VERSION = "WAMPlay/0.1.6";
         public static int PROTOCOL_VERSION = 1;
         public static WAMPlayClient lastClient;
@@ -29,9 +31,33 @@ public class WAMPlayServer extends Controller {
         static Map<String, WAMPlayClient> clients = Collections
                         .unmodifiableMap(new HashMap<String, WAMPlayClient>());
 
+        @OnOpen
+        public void onOpen(Session sClient){
+            
+             final WAMPlayClient client = new WAMPlayClient(sClient);
+             WAMPlayServer.addClient(client);
+             handleRequest(client, null);
+             lastClient = client;
+        }
+        
+        @OnMessage
+        public void onMessage(Session client, String message) throws IOException{
+            WAMPlayServer.addController(new TestRPCController());
+            
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode actualObj = mapper.readTree(message);
+            WAMPlayClient cc = new WAMPlayClient(client);
+            System.out.println("I: " + actualObj.toString());
+            if (cc != null){
+                handleRequest(new WAMPlayClient(client), actualObj);
+            } else {
+                System.out.println("NULL!");
+            }
+        }
+        
         /**
          * Handle the websocket.
-         */
+         
         public static WebSocket<JsonNode> connect() {
                 return new WebSocket<JsonNode>() {
 
@@ -63,7 +89,7 @@ public class WAMPlayServer extends Controller {
                         }
                 };
         }
-
+*/
         /**
          * Sends a raw WAMP message to the correct controller. Method is public for
          * easier testing. Do not use in your application.
@@ -74,10 +100,18 @@ public class WAMPlayServer extends Controller {
          *            client.
          */
         public static void handleRequest(WAMPlayClient client, JsonNode request) {
+            System.out.println("HandleRequest");
                 try {
+                    if (request != null){
+                        System.out.println("Req: " + request.toString());
+                    } else {
+                        System.out.println("Req: NULL");
+                    }
                         MessageHandler handler = HandlerFactory.get(request);
+                        
                         handler.process(client, request);
                 } catch (IllegalArgumentException e) {
+                    System.out.println("=(");
                         e.printStackTrace();
                 }
         }
@@ -87,7 +121,8 @@ public class WAMPlayServer extends Controller {
                 clientsNew.putAll(clients);
                 clientsNew.put(client.getSessionID(), client);
                 clients = Collections.unmodifiableMap(clientsNew);
-                log.debug("WAMPClient: " + client.getSessionID() + " connected.");
+                //log.debug("WAMPClient: " + client.getSessionID() + " connected.");
+                System.out.println("WAMPClient: " + client.getSessionID() + " connected.");
         }
 
         private static synchronized void removeClient(WAMPlayClient client) {
@@ -95,7 +130,8 @@ public class WAMPlayServer extends Controller {
                 clientsNew.putAll(clients);
                 clientsNew.remove(client.getSessionID());
                 clients = Collections.unmodifiableMap(clientsNew);
-                log.debug("WAMPClient: " + client.getSessionID() + " disconnected.");
+                //log.debug("WAMPClient: " + client.getSessionID() + " disconnected.");
+                System.out.println("WAMPClient: " + client.getSessionID() + " disconnected.");
         }
 
         /**

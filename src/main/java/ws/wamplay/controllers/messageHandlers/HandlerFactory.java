@@ -9,11 +9,13 @@ public class HandlerFactory {
 	//static ALogger log = Logger.of(HandlerFactory.class);
 
 	public static MessageHandler get(JsonNode request) throws IllegalArgumentException{
-		if (request == null) {
+                if (request == null) {
+                    
 			return MessageType.CONNECT.getHandler();
 		}
                 
 		if (!request.isArray() || request.get(0).getIntValue() == -1) {
+                    System.out.println("Not valid WAMP request");
 			throw new IllegalArgumentException("Not valid WAMP request: " + request.toString());
 		}
 

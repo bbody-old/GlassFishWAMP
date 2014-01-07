@@ -2,11 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ws.wamplay.controllers;
+package ws.wamplay.controllers.examples;
 
 import org.codehaus.jackson.JsonNode;
 import ws.wamplay.annotations.URIPrefix;
 import ws.wamplay.annotations.onRPC;
+import ws.wamplay.controllers.WAMPlayContoller;
 
 @URIPrefix("http://example.com/calc#")
 public class TestRPCController extends WAMPlayContoller {

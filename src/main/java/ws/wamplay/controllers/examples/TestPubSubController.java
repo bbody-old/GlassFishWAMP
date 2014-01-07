@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ws.wamplay.controllers;
+package ws.wamplay.controllers.examples;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -14,6 +14,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import ws.wamplay.annotations.URIPrefix;
 import ws.wamplay.annotations.onPublish;
 import ws.wamplay.annotations.onSubscribe;
+import ws.wamplay.controllers.WAMPlayContoller;
 import ws.wamplay.controllers.WAMPlayContoller;
 
 // Prefix is optional, but helps remove duplicate code.

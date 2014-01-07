@@ -1,9 +1,7 @@
 package ws.wamplay.controllers.messageHandlers;
 
 import java.util.List;
-import javax.json.Json;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import ws.wamplay.models.WAMPlayClient;
 import ws.wamplay.models.messages.Welcome;

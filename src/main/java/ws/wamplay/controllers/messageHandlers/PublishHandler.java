@@ -90,7 +90,6 @@ public class PublishHandler implements MessageHandler {
 	public static void publish(String topicURI, JsonNode event, Collection<String> exclude, Collection<String> eligible){
 		for (WAMPlayClient client : WAMPlayServer.getClients().values()) {
 			if (client.isSubscribed(topicURI)) {
-
 				if (isExcluded(client.getSessionID(), exclude)) {
 					continue;
 				}

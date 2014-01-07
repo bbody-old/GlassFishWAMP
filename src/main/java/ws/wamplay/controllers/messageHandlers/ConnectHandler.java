@@ -12,10 +12,7 @@ import ws.wamplay.models.messages.Welcome;
 public class ConnectHandler implements MessageHandler {
 	@Override
 	public void process(WAMPlayClient client, JsonNode message) {
-                System.out.println("Let's rock");
 		List<Object> welcome = new Welcome(client.getSessionID()).toList();
-                ObjectMapper mapper = new ObjectMapper();
-                System.out.println("LA:" + mapper.valueToTree(welcome).toString());
 		client.send(printList(welcome));
 	}
         

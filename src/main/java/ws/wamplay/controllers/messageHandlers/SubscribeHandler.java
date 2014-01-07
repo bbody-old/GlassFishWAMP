@@ -13,7 +13,6 @@ public class SubscribeHandler implements MessageHandler {
 	@Override
 	public void process(WAMPlayClient senderClient, JsonNode message) {
 		String topic = message.get(1).getTextValue();
-
 		PubSubCallback cb = PubSub.getPubSubCallback(topic);
 
 		if (cb == null) {
@@ -33,6 +32,8 @@ public class SubscribeHandler implements MessageHandler {
 		}
 
 		if (WAMPlayServer.isTopic(topic)) {
+                    
+                    
 			senderClient.subscribe(topic);
 			return;
 		}

@@ -34,7 +34,6 @@ public class WAMPlayClient {
 		}
 
 		try {
-                    //System.out.println(response.toString());
 			out.getBasicRemote().sendText(response.toString());
 		} catch (Exception e) {
 			//log.error("Cannot send, client dead!");
@@ -45,7 +44,6 @@ public class WAMPlayClient {
         public void send(String response) {
 
 		try {
-                    //System.out.println(new Gson().toJson(response).toString());
 			out.getBasicRemote().sendText(response);
 		} catch (Exception e) {
 			//log.error("Cannot send, client dead!");
@@ -70,6 +68,10 @@ public class WAMPlayClient {
 	}
 
 	public boolean isSubscribed(String topic) {
+            System.out.println("Topic: " + convertCURIEToURI(topic));
+            for (int i = 0; i < topics.size(); i++){
+                System.out.println(i + " " + topics.toArray()[i].toString());
+            }
 		return topics.contains(convertCURIEToURI(topic));
 	}
 
@@ -78,7 +80,7 @@ public class WAMPlayClient {
 	}
 
 	public String getSessionID() {
-		return this.ID;
+		return out.getId();
 	}
 
 	public void kill() throws IOException {

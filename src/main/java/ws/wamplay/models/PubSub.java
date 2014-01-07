@@ -28,7 +28,10 @@ public class PubSub {
 					@Override
 					protected JsonNode onPublish(String sessionID, JsonNode eventJson) {
 						try {
-							return (JsonNode) method.invoke(controller, sessionID, eventJson);
+                                                    
+                                                    JsonNode send = (JsonNode) method.invoke(controller, sessionID, eventJson);
+                                                    System.out.println("Publish: " + send.toString());
+							return send;
 						} catch (IllegalAccessException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

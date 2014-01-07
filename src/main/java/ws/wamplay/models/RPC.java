@@ -18,7 +18,6 @@ public class RPC {
     static ConcurrentMap<String, RPCCallback> procURIs = new ConcurrentHashMap<String, RPCCallback>();
 
     public static void addController(String prefix, final WAMPlayContoller controller) {
-        System.out.println("Adding");
         for (final Method method : controller.getClass().getMethods()) {
             if (method.isAnnotationPresent(onRPC.class)) {
                 String procURI = prefix

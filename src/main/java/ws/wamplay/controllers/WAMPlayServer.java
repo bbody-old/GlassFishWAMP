@@ -43,15 +43,13 @@ public class WAMPlayServer {
         @OnMessage
         public void onMessage(Session client, String message) throws IOException{
             WAMPlayServer.addController(new TestRPCController());
-            
+            WAMPlayServer.addController(new TestPubSubController());
             ObjectMapper mapper = new ObjectMapper();
             JsonNode actualObj = mapper.readTree(message);
-            WAMPlayClient cc = new WAMPlayClient(client);
-            System.out.println("I: " + actualObj.toString());
+            
+            WAMPlayClient cc = getClient(client.getId());
             if (cc != null){
-                handleRequest(new WAMPlayClient(client), actualObj);
-            } else {
-                System.out.println("NULL!");
+                handleRequest(cc, actualObj);
             }
         }
         
@@ -100,18 +98,11 @@ public class WAMPlayServer {
          *            client.
          */
         public static void handleRequest(WAMPlayClient client, JsonNode request) {
-            System.out.println("HandleRequest");
                 try {
-                    if (request != null){
-                        System.out.println("Req: " + request.toString());
-                    } else {
-                        System.out.println("Req: NULL");
-                    }
                         MessageHandler handler = HandlerFactory.get(request);
                         
                         handler.process(client, request);
                 } catch (IllegalArgumentException e) {
-                    System.out.println("=(");
                         e.printStackTrace();
                 }
         }

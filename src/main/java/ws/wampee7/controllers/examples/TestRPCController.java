@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ws.wamplay.controllers.examples;
+package ws.wampee7.controllers.examples;
 
 import org.codehaus.jackson.JsonNode;
-import ws.wamplay.annotations.URIPrefix;
-import ws.wamplay.annotations.onRPC;
-import ws.wamplay.controllers.WAMPlayContoller;
+import ws.wampee7.annotations.URIPrefix;
+import ws.wampee7.annotations.onRPC;
+import ws.wampee7.controllers.WAMPee7Contoller;
 
 @URIPrefix("http://example.com/calc#")
-public class TestRPCController extends WAMPlayContoller {
+public class TestRPCController extends WAMPee7Contoller {
 
         @onRPC("meaningOfLife")
         public static String getMeaningOfLife(String sessionID) {

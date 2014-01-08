@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ws.wamplay.controllers.examples;
+package ws.wampee7.controllers.examples;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -10,16 +10,15 @@ import java.util.logging.Logger;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import ws.wampee7.annotations.URIPrefix;
+import ws.wampee7.annotations.onPublish;
+import ws.wampee7.annotations.onSubscribe;
+import ws.wampee7.controllers.WAMPee7Contoller;
 
-import ws.wamplay.annotations.URIPrefix;
-import ws.wamplay.annotations.onPublish;
-import ws.wamplay.annotations.onSubscribe;
-import ws.wamplay.controllers.WAMPlayContoller;
-import ws.wamplay.controllers.WAMPlayContoller;
 
 // Prefix is optional, but helps remove duplicate code.
 @URIPrefix("http://example.com/")
-public class TestPubSubController extends WAMPlayContoller {
+public class TestPubSubController extends WAMPee7Contoller {
         static int MAX_MESSAGE_LENGTH = 10;
         
         /**

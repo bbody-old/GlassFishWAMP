@@ -19,7 +19,7 @@ asyncTest("PubSub: Subscribe then unsubscribe and publish", function() {
                                 console.log("Unexpected message received");
                                 ok(false, "Unexpected message received");
                                 //equal("Hello", event);
-                                start();
+                                //start();
                             }
                         };
                         ok(true, "Successfully started");
@@ -33,7 +33,7 @@ asyncTest("PubSub: Subscribe then unsubscribe and publish", function() {
                             } else {
                                 console.log("Second message: 2");
                                 ok(true, "Second message: 2");
-                                start();
+                                //start();
                             }
                         });
                         
@@ -44,8 +44,11 @@ asyncTest("PubSub: Subscribe then unsubscribe and publish", function() {
                         setTimeout(function (){session.unsubscribe(truncate_topic, topicHandler1);
                             setTimeout(function(){
                                 session.publish(truncate_topic, "Hello");
+                                setTimeout(function (){start();},1000);
                             },1000);
                         }, 1000);
+                        
+                        
 
                     },
                     // WAMP session is gone

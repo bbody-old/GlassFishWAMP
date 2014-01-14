@@ -16,11 +16,14 @@ asyncTest( "RPC: Non existant method", function() {
                //equal(res, "wrong number of arguments");
                
                //start();
+               ok(false, "not exepected...");
+               start();
            },
 
 	        // RPC error callback
 	        function (error, desc) {
                ok( true, "Error!" );
+               start();
                
 	        }
 	     );
@@ -34,5 +37,5 @@ asyncTest( "RPC: Non existant method", function() {
 	  {skipSubprotocolCheck:true, skipSubprotocolAnnounce:true} // Important! Play rejects all subprotocols...
 	);
 
-	start();
+	
 });

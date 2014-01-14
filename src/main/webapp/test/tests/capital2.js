@@ -18,6 +18,7 @@ asyncTest( "RPC: No capital test", function() {
 	        // RPC error callback
 	        function (error, desc) {
                ok( true, "Did not start!" );
+               start();
 	        }
 	     );
 	  },
@@ -29,5 +30,5 @@ asyncTest( "RPC: No capital test", function() {
 	  },
 	  {skipSubprotocolCheck:true, skipSubprotocolAnnounce:true} // Important! Play rejects all subprotocols...
 	);
-	start();
+	
 });

@@ -21,6 +21,7 @@ asyncTest( "RPC: Vanilla meaningOfLife test", function() {
 	        // RPC error callback
 	        function (error, desc) {
                ok( false, "Did not start!" );
+               start();
 	        }
 	     );
 	  },

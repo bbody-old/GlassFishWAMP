@@ -14,11 +14,13 @@ asyncTest( "RPC: Extra args meaningOfLife test", function() {
 	        function (res) {
                console.log(res);
                equal(res, null);
+               start();
            },
 
 	        // RPC error callback
 	        function (error, desc) {
                ok( true, "Error!" );
+               start();
 	        }
 	     );
 	  },
@@ -30,5 +32,4 @@ asyncTest( "RPC: Extra args meaningOfLife test", function() {
 	  },
 	  {skipSubprotocolCheck:true, skipSubprotocolAnnounce:true} // Important! Play rejects all subprotocols...
 	);
-	start();
 });

@@ -7,15 +7,13 @@ asyncTest( "PubSub: Vanilla subscribe and publish", function() {
 
 	  // WAMP session was established
 	  function (session) {
-         ok( true, "Successfully started" );
-	     session.subscribe(truncate_topic, function onEvent(topic, event) {
-		      equal(event, "Hello");
-
-		    });
+            ok( true, "Successfully started" );
+                session.subscribe(truncate_topic, function onEvent(topic, event) {
+                         equal(event, "Hello");
+                         start();
+                       });
 
 	    	session.publish(truncate_topic, "Hello");
-
-
 	  },
 
 	  // WAMP session is gone
@@ -26,5 +24,5 @@ asyncTest( "PubSub: Vanilla subscribe and publish", function() {
 	  {skipSubprotocolCheck:true, skipSubprotocolAnnounce:true} // Important! Play rejects all subprotocols...
 	);
 
-	start();
+	
 });

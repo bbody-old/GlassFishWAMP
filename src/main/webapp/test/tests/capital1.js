@@ -14,11 +14,13 @@ asyncTest( "RPC: Vanilla capital test", function() {
 	        function (res) {
                //console.log(res);
                equal(res, "HELLO1#@@@43");
+               start();
            },
 
 	        // RPC error callback
 	        function (error, desc) {
                ok( false, "Did not start!" );
+               start();
 	        }
 	     );
 	  },
@@ -30,5 +32,5 @@ asyncTest( "RPC: Vanilla capital test", function() {
 	  },
 	  {skipSubprotocolCheck:true, skipSubprotocolAnnounce:true} // Important! Play rejects all subprotocols...
 	);
-	start();
+	
 });
